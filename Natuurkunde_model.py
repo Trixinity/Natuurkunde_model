@@ -26,6 +26,7 @@ dt = 0.01
 vx = v*cos(hoek)
 
 while vx >= 0:
+    t = t + dt
     if y >= 0:
        vx = v*cos(hoek)
        vy = v*sin(hoek) 
@@ -48,7 +49,7 @@ while vx >= 0:
        ay = Fy/m
 
        x = x + vx*dt
-       y = y + vy*dt
+       y = y - vy*dt
 
        Ek = 0.5*m*v**2
        Ez = m*g*x
@@ -57,11 +58,17 @@ while vx >= 0:
        W = Fl*v*dt
        E = Emech - W
 
-       t = t + dt
 
     else:
-       Fy = 0
-           
+       y = 0
+       Fres = 0 - Fl
+       a = Fres/m
+       vx = v - (a*dt)
+       x = x + vx*dt
+
+       vx
+
+                
 list.append
 
 df = pd.DataFrame({'x1':list1, 'y1': list2})
