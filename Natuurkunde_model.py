@@ -23,38 +23,46 @@ y = 0.259
 t = 0
 dt = 0.01
 
-while t > 0:
-    continue
-    
 vx = v*cos(hoek)
-vy = v*sin(hoek) 
 
-vxv = vx/v
-vyv = vy/v
+while vx >= 0:
+    if y >= 0:
+       vx = v*cos(hoek)
+       vy = v*sin(hoek) 
 
-Fz = -m*g
+       vxv = vx/v
+       vyv = vy/v
 
-v = sqrt(vx**2+vy**2)
+       Fz = -m*g
 
-Fw = k*v**2 
-Fwx = -Fw*vxv
-Fwy = -Fw*vyv
+       v = sqrt(vx**2+vy**2)
 
-Ek = 0.5*m*v**2
-Ez = m*g*x
-Emech = Ek + Ez
+       Fl = k*v**2 
+       Flx = -Fl*vxv
+       Fly = -Fl*vyv
 
-W = Fw*v*dt
-E = Emech - W
+       Fx = Flx
+       Fy = Fz
 
-Fx = Fwx
-Fy = Fz + Fwy
+       ax = Fx/m
+       ay = Fy/m
 
-x = x + vx*dt
-y = y + vy*dt
+       x = x + vx*dt
+       y = y + vy*dt
 
-t = t + dt
+       Ek = 0.5*m*v**2
+       Ez = m*g*x
+       Emech = Ek + Ez
 
+       W = Fl*v*dt
+       E = Emech - W
+
+       t = t + dt
+
+    else:
+       Fy = 0
+           
+list.append
 
 df = pd.DataFrame({'x1':list1, 'y1': list2})
 ax = df.plot(x='x1', y='y1', label='nvt')
