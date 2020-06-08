@@ -6,7 +6,7 @@ cos = np.cos
 sin = np.sin
 sqrt = np.sqrt
 
-# Variablen bij start
+# Variabelen bij start
 m = 0.026
 g = 9.81
 k = 0.15
