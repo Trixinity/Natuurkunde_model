@@ -1,76 +1,125 @@
-import math
-cos = math.cos
-sin = math.sin
-sqrt = math.sqrt
-
 import matplotlib
 import matplotlib.pyplot as plt
-import pandas as pd
 import numpy as np
+cos = np.cos
+sin = np.sin
+sqrt = np.sqrt
 
-list1 = [0]
-list2 = [0]
-
+# Variablen bij start
 m = 0.026
 g = 9.81
-k = 0.05
+k = 0.15
 hoek = 20
-v = 0.01
-
 x = 0
-y = 0.259
+y = 0.300
+vx = 0
+vy = 0
+Cr = 0.010
+alpha = np.deg2rad(hoek)
 
+# Tijdinstellingen
 t = 0
 dt = 0.01
 
-vx = v*cos(hoek)
+# Tabellen/lists
+xlist = []
+ylist = []
+vxlist = []
+vylist = []
+axlist = []
+aylist = []
+tlist = []
 
 while vx >= 0:
-    t = t + dt
-    if y >= 0:
-       vx = v*cos(hoek)
-       vy = v*sin(hoek) 
+	if y >= 0:
+		Fz = m*g
+		Fn = Fz*cos(alpha)
+		
+		# Snelheid
+		v = sqrt(vx**2+vy**2)
+		vx = v*cos(alpha)
+		vy = v*sin(alpha)
+		
+		# Luchtweerstand
+		Fl = k*v**2
+		Flx = Fl*cos(alpha)
+		Fly = Fl*sin(alpha)
+		
+		# Rolweerstand
+		Fwr = Cr*Fn
+		Fwrx = Fwr*cos(alpha)
+		Fwry = Fwr*sin(alpha)
+		
+		# Resultante kracht
+		Fres = Fz*sin(alpha)
+		Fresx = Fres*cos(alpha)-Flx-Fwrx
+		Fresy = -Fres*sin(alpha)+Fly+Fwry
+		
+		# Versnelling
+		ax = Fresx/m
+		ay = Fresy/m
+		
+	elif y <= 0:
+		# Beredeneringen
+		vy = 0
+		Fn = Fz
+		v = vx
+		v = 0
+		
+		# Weerstanden
+		Fl = k*v**2
+		Fr = Fz*Cr
+		Fres = -Fl-Fr
+		
+		# Versnelling
+		ax = Fres/m
+		ay = Fresy/m
+		
+# Energie en Arbeid
+	Ek = 0.5*m*v**2
+	Ez = m*g*x
+	Emech = Ek + Ez
+	W = Fl*v*dt
+	E = Emech - W
 
-       vxv = vx/v
-       vyv = vy/v
+# Nieuwe waardes
+	vx += ax*dt
+	vy += ay*dt
+	x += vx*dt
+	y -= vy*dt
+	t += dt
+	
+# Lijst van waardes
+	axlist.append(float(ax))
+	aylist.append(float(ay))
+	vxlist.append(float(vx))
+	vylist.append(float(vy))
+	xlist.append(float(x))
+	ylist.append(float(y))
+	tlist.append(float(t))
 
-       Fz = -m*g
-
-       v = sqrt(vx**2+vy**2)
-
-       Fl = k*v**2 
-       Flx = -Fl*vxv
-       Fly = -Fl*vyv
-
-       Fx = Flx
-       Fy = Fz
-
-       ax = Fx/m
-       ay = Fy/m
-
-       x = x + vx*dt
-       y = y - vy*dt
-
-       Ek = 0.5*m*v**2
-       Ez = m*g*x
-       Emech = Ek + Ez
-
-       W = Fl*v*dt
-       E = Emech - W
-
-
-    else:
-       y = 0
-       Fres = 0 - Fl
-       a = Fres/m
-       vx = v - (a*dt)
-       x = x + vx*dt
-
-       vx
-
-                
-list.append
-
-df = pd.DataFrame({'x1':list1, 'y1': list2})
-ax = df.plot(x='x1', y='y1', label='nvt')
+# Grafieken
+plt.plot(tlist,ylist,"r")
+plt.xlabel("t")
+plt.ylabel("y")
+plt.show()
+plt.plot(tlist,xlist,"b")
+plt.xlabel("t")
+plt.ylabel("x")
+plt.show()
+plt.plot(tlist,vxlist,"g")
+plt.xlabel("t")
+plt.ylabel("vx")
+plt.show()
+plt.plot(tlist,vylist,"g")
+plt.xlabel("t")
+plt.ylabel("vy")
+plt.show()
+plt.plot(tlist,axlist,"r")
+plt.xlabel("t")
+plt.ylabel("ax")
+plt.show()
+plt.plot(tlist,aylist,"b")
+plt.xlabel("t")
+plt.ylabel("ay")
 plt.show()
